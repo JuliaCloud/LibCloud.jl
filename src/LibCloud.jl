@@ -9,14 +9,9 @@ import Base: convert, show
 
 const _libcloud = PyCall.PyNULL()
 
-#macro _pydoc(p, j)
-#    quote
-#        @doc convert(AbstractString, $p["__doc__"]) $j
-#    end
-#end
-
 include("lazyhelp.jl")
 include("storage.jl")
+include("dns.jl")
 
 function __init__()
     copy!(_libcloud, pyimport_conda("libcloud", "apache-libcloud"))
@@ -28,6 +23,7 @@ function __init__()
     end
 
     __init_storage()
+    __init_dns()
 end
 
 end # module

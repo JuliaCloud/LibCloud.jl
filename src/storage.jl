@@ -60,19 +60,19 @@ for f in _object_fns
     @eval @doc LazyHelp(_libcloud_storage_base, "Object", $sf) $(f)(obj::Object, args...; kwargs...) = obj.o[$(sf)](args..., kwargs...)
 end
 
-"""Initialize cloud storage"""
+# Initialize cloud storage
 function __init_storage()
     copy!(_libcloud_storage_types, pyimport("libcloud.storage.types"))
     copy!(_libcloud_storage_providers, pyimport("libcloud.storage.providers"))
     copy!(_libcloud_storage_base, pyimport("libcloud.storage.base"))
 
-    global const StorageProviders = pywrap(_libcloud_storage_types[:Provider])
+    global const StorageProvider = pywrap(_libcloud_storage_types[:Provider])
 
     pytype_mapping(_libcloud_storage_base["Container"], Container)
     pytype_mapping(_libcloud_storage_base["Object"], Object)
 end
 
-export StorageProviders, Storage, Container, Object
+export StorageProvider, Storage, Container, Object
 export create_container, delete_container, delete_object, download_object, download_object_as_stream,
        enable_container_cdn, enable_object_cdn, get_container, get_container_cdn_url, get_object,
        get_object_cdn_url, iterate_container_objects, iterate_containers, list_container_objects,
