@@ -18,15 +18,17 @@ end
     for k in h.keys
         o = o[k]
     end
+    doc = ""
     if haskey(o, "__doc__")
         ds = o["__doc__"]
-        if PyCall.pynothing[] == ds.o
-            print(io, "no Python docstring found for ", h.o)
-        else
-            print(io, convert(AbstractString, o["__doc__"]))
+        if PyCall.pynothing[] != ds.o
+            doc = convert(AbstractString, ds)
         end
+    end
+    if isempty(doc)
+        print(io, "no Python docstring found for ", o)
     else
-        print(io, "no Python docstring found for ", h.o)
+        print(io, doc)
     end
 end
 Base.show(io::IO, h::LazyHelp) = @compat show(io, "text/plain", h)

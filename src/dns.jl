@@ -2,17 +2,17 @@ const _libcloud_dns_types = PyCall.PyNULL()
 const _libcloud_dns_providers = PyCall.PyNULL()
 const _libcloud_dns_base = PyCall.PyNULL()
 
-type DNS
+type DNSDriver
     driver::Module
 
-    function DNS(provider, args...; kwargs...)
+    function DNSDriver(provider, args...; kwargs...)
         cls = _libcloud_dns_providers[:get_driver](provider)
         driver = cls(args...; kwargs...)
         new(pywrap(driver))
     end
 end
-function show(io::IO, c::DNS)
-    print(io, "DNS: ", c.driver.name)
+function show(io::IO, c::DNSDriver)
+    print(io, "DNS Driver: ", c.driver.name)
 end
 
 type Zone
@@ -35,17 +35,23 @@ function show(io::IO, o::Record)
 end
 @doc LazyHelp(_libcloud_dns_base, "Record") Record
 
-const _dns_fns = [:list_record_types, :iterate_zones, :list_zones, :iterate_records, :list_records,
-                  :get_zone, :get_record, :create_zone, :update_zone, :create_record, :update_record,
-                  :delete_zone, :delete_record, :export_zone_to_bind_format, :export_zone_to_bind_zone_file]
+const _dnsdriver_fns = [
+    :list_record_types, :iterate_zones, :list_zones, :iterate_records, :list_records,
+    :get_zone, :get_record, :create_zone, :update_zone, :create_record, :update_record,
+    :delete_zone, :delete_record, :export_zone_to_bind_format, :export_zone_to_bind_zone_file
+]
 
-const _zone_fns = [:list_records, :create_record, :update, :delete, :export_to_bind_format, :export_to_bind_zone_file]
+const _zone_fns = [
+    :list_records, :create_record, :update, :delete, :export_to_bind_format, :export_to_bind_zone_file
+]
 
-const _record_fns = [:update, :delete]
+const _record_fns = [
+    :update, :delete
+]
 
-for f in _dns_fns
+for f in _dnsdriver_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_dns_base, "DNSDriver", $sf) $(f)(dns::DNS, args...; kwargs...) = dns.driver.$(f)(args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_dns_base, "DNSDriver", $sf) $(f)(dns::DNSDriver, args...; kwargs...) = dns.driver.$(f)(args..., kwargs...)
 end
 
 for f in _zone_fns
@@ -71,7 +77,7 @@ function __init_dns()
     pytype_mapping(_libcloud_dns_base["Record"], Record)
 end
 
-export DNSProvider, DNS, Zone, Record
+export DNSProvider, DNSDriver, Zone, Record
 export list_record_types, iterate_zones, list_zones, iterate_records, list_records,
        get_zone, get_record, create_zone, update_zone, create_record, update_record,
        delete_zone, delete_record, export_zone_to_bind_format, export_zone_to_bind_zone_file
