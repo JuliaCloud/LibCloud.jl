@@ -15,6 +15,7 @@ include("storage.jl")
 include("dns.jl")
 include("loadbalancer.jl")
 include("compute.jl")
+include("containers.jl")
 
 function __init__()
     copy!(_libcloud, pyimport_conda("libcloud", "apache-libcloud"))
