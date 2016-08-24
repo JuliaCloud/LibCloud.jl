@@ -10,9 +10,11 @@ import Base: convert, show, download
 const _libcloud = PyCall.PyNULL()
 
 include("lazyhelp.jl")
+include("common.jl")
 include("storage.jl")
 include("dns.jl")
 include("loadbalancer.jl")
+include("compute.jl")
 
 function __init__()
     copy!(_libcloud, pyimport_conda("libcloud", "apache-libcloud"))
@@ -22,10 +24,6 @@ function __init__()
     catch
         v"0.0" # fallback
     end
-
-    __init_storage()
-    __init_dns()
-    __init_loadbalancer()
 end
 
 end # module
