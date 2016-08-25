@@ -1,11 +1,6 @@
 module Containers
 
-using Compat
-using PyCall
-import PyCall: PyObject, pycall, pyexists
-import Base: convert, show, download
-using ..LazyHelp
-using .._base_driver_fns
+include("module_common.jl")
 
 const _libcloud_container_types = PyCall.PyNULL()
 const _libcloud_container_providers = PyCall.PyNULL()
@@ -142,8 +137,6 @@ end
 
 # types
 export ContainerProvider, ContainerDriver, ContainerState, ContainerImage, ContainerCluster, ClusterLocation, Container
-# base driver functions
-export list_regions
 # container driver functions
 export install_image, list_images, list_containers, deploy_container, get_container,
        start_container, stop_container, restart_container, destroy_container,

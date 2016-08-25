@@ -1,11 +1,6 @@
 module Compute
 
-using Compat
-using PyCall
-import PyCall: PyObject, pycall, pyexists
-import Base: convert, show, download
-using ..LazyHelp
-using .._base_driver_fns
+include("module_common.jl")
 
 const _libcloud_compute_types = PyCall.PyNULL()
 const _libcloud_compute_providers = PyCall.PyNULL()
@@ -257,8 +252,6 @@ end
 
 # types
 export ComputeProvider, NodeDriver, NodeSize, NodeImage, Node, NodeLocation, NodeAuthSSHKey, NodeAuthPassword, StorageVolume, VolumeSnapshot, KeyPair
-# base driver functions
-export list_regions
 # Node management methods
 export list_nodes, list_sizes, list_locations, create_node, deploy_node, reboot_node, destroy_node, wait_until_running
 # Volume and snapshot management methods

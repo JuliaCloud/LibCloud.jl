@@ -1,11 +1,6 @@
 module DNS
 
-using Compat
-using PyCall
-import PyCall: PyObject, pycall, pyexists
-import Base: convert, show, download
-using ..LazyHelp
-using .._base_driver_fns
+include("module_common.jl")
 
 const _libcloud_dns_types = PyCall.PyNULL()
 const _libcloud_dns_providers = PyCall.PyNULL()
@@ -106,8 +101,6 @@ end
 
 # types
 export DNSProvider, DNSDriver, RecordType, Zone, Record
-# base driver functions
-export list_regions
 # dns driver functions
 export list_record_types, iterate_zones, list_zones, iterate_records, list_records,
        get_zone, get_record, create_zone, update_zone, create_record, update_record,

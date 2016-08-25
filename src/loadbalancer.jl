@@ -1,11 +1,6 @@
 module LB
 
-using Compat
-using PyCall
-import PyCall: PyObject, pycall, pyexists
-import Base: convert, show, download
-using ..LazyHelp
-using .._base_driver_fns
+include("module_common.jl")
 
 const _libcloud_lb_types = PyCall.PyNULL()
 const _libcloud_lb_providers = PyCall.PyNULL()
@@ -100,8 +95,6 @@ end
 
 # types
 export LBProvider, LBDriver, State, MemberCondition, Algorithm, DefaultAlgorithm, LoadBalancer, Member
-# base driver functions
-export list_regions
 # lb driver functions
 export list_protocols, list_balancers, create_balancer, destroy_balancer,
        get_balancer, update_balancer, balancer_attach_compute_node, balancer_attach_member,

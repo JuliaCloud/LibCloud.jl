@@ -1,11 +1,6 @@
 module Storage
 
-using Compat
-using PyCall
-import PyCall: PyObject, pycall, pyexists
-import Base: convert, show, download
-using ..LazyHelp
-using .._base_driver_fns
+include("module_common.jl")
 
 const _libcloud_storage_types = PyCall.PyNULL()
 const _libcloud_storage_providers = PyCall.PyNULL()
@@ -103,8 +98,6 @@ end
 
 # types
 export StorageProvider, StorageDriver, Container, Object
-# base driver functions
-export list_regions
 # storage driver functions
 export create_container, delete_container, delete_object, download_object, download_object_as_stream,
        enable_container_cdn, enable_object_cdn, get_container, get_container_cdn_url, get_object,
