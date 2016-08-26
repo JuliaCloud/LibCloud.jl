@@ -7,6 +7,10 @@ const _libcloud = PyCall.PyNULL()
 const _base_driver_fns = [:list_regions]
 global list_regions
 
+if isless(Base.VERSION, v"0.5.0-")
+convert{T}(::Type{Nullable{T}}, x) = convert(Nullable{T}, convert(T, x))
+end
+
 function _map_types(pymod, types)
     for t in types
         n = rsplit(string(t), '.', limit=2)[end]

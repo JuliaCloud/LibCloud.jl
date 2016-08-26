@@ -10,7 +10,7 @@ const _libcloud_compute_deployment = PyCall.PyNULL()
 immutable NodeDriver
     o::PyObject
 
-    function NodeDriver(provider::String, args...; kwargs...)
+    function NodeDriver(provider::Compat.String, args...; kwargs...)
         cls = _libcloud_compute_providers[:get_driver](provider)
         NodeDriver(cls(args...; kwargs...))
     end
@@ -22,8 +22,8 @@ features(driver::NodeDriver) = driver.o[:features]
 immutable NodeSize
     o::PyObject
 
-    id::String
-    name::String
+    id::Compat.String
+    name::Compat.String
     ram::Nullable{Int}
     disk::Nullable{Int}
     bandwidth::Nullable{Int}
@@ -43,8 +43,8 @@ show(io::IO, o::NodeSize) = print(io, o.o[:__str__]())
 immutable NodeImage
     o::PyObject
 
-    id::String
-    name::String
+    id::Compat.String
+    name::Compat.String
     extra::Dict
     driver::NodeDriver
     
@@ -60,8 +60,8 @@ show(io::IO, o::NodeImage) = print(io, o.o[:__str__]())
 immutable Node
     o::PyObject
 
-    id::String
-    name::String
+    id::Compat.String
+    name::Compat.String
     public_ips::Vector
     private_ips::Vector
     size::Nullable{NodeSize}
@@ -86,9 +86,9 @@ state(n::Node) = n.o[:state]
 immutable NodeLocation
     o::PyObject
 
-    id::String
-    name::String
-    country::String
+    id::Compat.String
+    name::Compat.String
+    country::Compat.String
     driver::NodeDriver
 
     function NodeLocation(o::PyObject)
@@ -103,12 +103,12 @@ show(io::IO, o::NodeLocation) = print(io, o.o[:__str__]())
 immutable NodeAuthSSHKey
     o::PyObject
 
-    pubkey::String
+    pubkey::Compat.String
 
     function NodeAuthSSHKey(o::PyObject)
         new(o, o[:pubkey])
     end
-    function NodeAuthSSHKey(pubkey::String)
+    function NodeAuthSSHKey(pubkey::Compat.String)
         new(_libcloud_compute_base["NodeAuthSSHKey"](pubkey), pubkey)
     end
 end
@@ -120,7 +120,7 @@ show(io::IO, o::NodeAuthSSHKey) = print(io, o.o[:__str__]())
 immutable NodeAuthPassword
     o::PyObject
 
-    password::String
+    password::Compat.String
     generated::Bool
 
     function NodeAuthPassword(o::PyObject)
@@ -135,10 +135,10 @@ show(io::IO, o::NodeAuthPassword) = print(io, o.o[:__str__]())
 immutable StorageVolume
     o::PyObject
 
-    id::String
-    name::String
+    id::Compat.String
+    name::Compat.String
     size::Int
-    state::String
+    state::Compat.String
     extra::Dict
     driver::NodeDriver
 
@@ -154,10 +154,10 @@ show(io::IO, o::StorageVolume) = print(io, o.o[:__str__]())
 immutable VolumeSnapshot
     o::PyObject
 
-    id::String
+    id::Compat.String
     size::Int
     created::DateTime
-    state::String
+    state::Compat.String
     extra::Dict
     driver::NodeDriver
 
@@ -174,10 +174,10 @@ show(io::IO, o::VolumeSnapshot) = print(io, o.o[:__str__]())
 immutable KeyPair
     o::PyObject
 
-    name::String
-    fingerprint::String
-    public_key::Nullable{String}
-    private_key::Nullable{String}
+    name::Compat.String
+    fingerprint::Compat.String
+    public_key::Nullable{Compat.String}
+    private_key::Nullable{Compat.String}
     extra::Dict
     driver::NodeDriver
 
@@ -193,12 +193,12 @@ show(io::IO, o::KeyPair) = print(io, o.o[:__str__]())
 immutable SSHKeyDeployment
     o::PyObject
 
-    key::String
+    key::Compat.String
 
     function SSHKeyDeployment(o::PyObject)
         new(o, o[:key])
     end
-    function SSHKeyDeployment(key::String)
+    function SSHKeyDeployment(key::Compat.String)
         new(_libcloud_compute_deployment["SSHKeyDeployment"](key), key)
     end
 end
@@ -210,13 +210,13 @@ show(io::IO, o::SSHKeyDeployment) = print(io, o.o[:__str__]())
 immutable FileDeployment
     o::PyObject
 
-    source::String
-    target::String
+    source::Compat.String
+    target::Compat.String
 
     function FileDeployment(o::PyObject)
         new(o, o[:source], o[:target])
     end
-    function FileDeployment(source::String, target::String)
+    function FileDeployment(source::Compat.String, target::Compat.String)
         new(_libcloud_compute_deployment["FileDeployment"](source, target), source, target)
     end
 end
@@ -228,15 +228,15 @@ show(io::IO, o::FileDeployment) = print(io, o.o[:__str__]())
 immutable ScriptDeployment
     o::PyObject
 
-    script::String
-    args::Vector{String}
-    name::String
+    script::Compat.String
+    args::Vector{Compat.String}
+    name::Compat.String
     delete::Bool
 
     function ScriptDeployment(o::PyObject)
         new(o, o[:script], o[:args], o[:name], o[:delete])
     end
-    function ScriptDeployment(script::String, args...; kwargs...)
+    function ScriptDeployment(script::Compat.String, args...; kwargs...)
         ScriptDeployment(_libcloud_compute_deployment["ScriptDeployment"](script, args..., kwargs...))
     end
 end
@@ -248,15 +248,15 @@ show(io::IO, o::ScriptDeployment) = print(io, o.o[:__str__]())
 immutable ScriptFileDeployment
     o::PyObject
 
-    script::String
-    args::Vector{String}
-    name::String
+    script::Compat.String
+    args::Vector{Compat.String}
+    name::Compat.String
     delete::Bool
 
     function ScriptFileDeployment(o::PyObject)
         new(o, o[:script], o[:args], o[:name], o[:delete])
     end
-    function ScriptFileDeployment(script::String, args...; kwargs...)
+    function ScriptFileDeployment(script::Compat.String, args...; kwargs...)
         ScriptDeployment(_libcloud_compute_deployment["ScriptFileDeployment"](script, args..., kwargs...))
     end
 end

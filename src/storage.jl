@@ -9,7 +9,7 @@ const _libcloud_storage_base = PyCall.PyNULL()
 immutable StorageDriver
     o::PyObject
 
-    function StorageDriver(provider::String, args...; kwargs...)
+    function StorageDriver(provider::Compat.String, args...; kwargs...)
         cls = _libcloud_storage_providers[:get_driver](provider)
         StorageDriver(cls(args...; kwargs...))
     end
@@ -20,7 +20,7 @@ show(io::IO, c::StorageDriver) = print(io, c.o[:__str__]())
 immutable Container
     o::PyObject
 
-    name::String
+    name::Compat.String
     extra::Dict
     driver::StorageDriver
 
@@ -36,9 +36,9 @@ show(io::IO, o::Container) = print(io, o.o[:__str__]())
 immutable Object
     o::PyObject
 
-    name::String
+    name::Compat.String
     size::Int
-    hash::String
+    hash::Compat.String
     container::Container
     extra::Dict
     meta_data::Dict
