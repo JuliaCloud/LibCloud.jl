@@ -1,5 +1,3 @@
-__precompile__()
-
 module LibCloud
 
 include("common.jl")

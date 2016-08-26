@@ -95,8 +95,7 @@ function __init__()
     global const DNSProvider = pywrap(_libcloud_dns_types[:Provider])
     global const RecordType = pywrap(_libcloud_dns_types[:RecordType])
 
-    pytype_mapping(_libcloud_dns_base["Zone"], Zone)
-    pytype_mapping(_libcloud_dns_base["Record"], Record)
+    _map_types(_libcloud_dns_base, (Zone, Record))
 end
 
 # types

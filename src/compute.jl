@@ -17,6 +17,7 @@ immutable NodeDriver
     NodeDriver(driver::PyObject) = new(driver)
 end
 show(io::IO, c::NodeDriver) = print(io, c.o[:__str__]())
+features(driver::NodeDriver) = driver.o[:features]
 
 immutable NodeSize
     o::PyObject
@@ -61,24 +62,26 @@ immutable Node
 
     id::String
     name::String
-    state::String
     public_ips::Vector
     private_ips::Vector
-    size::NodeSize
-    image::NodeImage
-    created_at::DateTime
+    size::Nullable{NodeSize}
+    image::Nullable{NodeImage}
+    created_at::Nullable{DateTime}
     extra::Dict
     driver::NodeDriver
 
     function Node(o::PyObject)
-        created_at = o[:created_at]
-        new(o, o[:id], o[:name], o[:state], o[:public_ips], o[:private_ips], NodeSize(o[:size]), NodeImage(o[:image]), created_at, o[:extra], NodeDriver(o[:driver]))
+        created_at = (o[:created_at] == nothing) ? Nullable{DateTime}() : Nullable(DateTime(o[:created_at]))
+        size = (o[:size] == nothing) ? Nullable{NodeSize}() : Nullable(NodeSize(o[:size]))
+        image = (o[:image] == nothing) ? Nullable{NodeImage}() : Nullable(NodeImage(o[:image]))
+        new(o, o[:id], o[:name], o[:public_ips], o[:private_ips], size, image, created_at, o[:extra], NodeDriver(o[:driver]))
     end
 end
 PyObject(o::Node) = o.o
 convert(::Type{Node}, o::PyObject) = Node(o)
 show(io::IO, o::Node) = print(io, o.o[:__str__]())
 @doc LazyHelp(_libcloud_compute_base, "Node") Node
+state(n::Node) = n.o[:state]
 
 immutable NodeLocation
     o::PyObject
@@ -104,6 +107,9 @@ immutable NodeAuthSSHKey
 
     function NodeAuthSSHKey(o::PyObject)
         new(o, o[:pubkey])
+    end
+    function NodeAuthSSHKey(pubkey::String)
+        new(_libcloud_compute_base["NodeAuthSSHKey"](pubkey), pubkey)
     end
 end
 PyObject(o::NodeAuthSSHKey) = o.o
@@ -351,7 +357,8 @@ for f in _multi_step_deployment_accessor_fns
     @eval $(f)(d::MultiStepDeployment) = d.o[sf]
 end
 
-# Initialize cloud dns
+
+# Initialize cloud compute
 function __init__()
     copy!(_libcloud_compute_types, pyimport("libcloud.compute.types"))
     copy!(_libcloud_compute_providers, pyimport("libcloud.compute.providers"))
@@ -364,27 +371,17 @@ function __init__()
     global const StorageVolumeState = pywrap(_libcloud_compute_types[:StorageVolumeState])
     global const VolumeSnapshotState = pywrap(_libcloud_compute_types[:VolumeSnapshotState])
 
-    pytype_mapping(_libcloud_compute_base["Node"], Node)
-    pytype_mapping(_libcloud_compute_base["NodeSize"], NodeSize)
-    pytype_mapping(_libcloud_compute_base["NodeImage"], NodeImage)
-    pytype_mapping(_libcloud_compute_base["NodeLocation"], NodeLocation)
-    pytype_mapping(_libcloud_compute_base["NodeAuthSSHKey"], NodeAuthSSHKey)
-    pytype_mapping(_libcloud_compute_base["NodeAuthPassword"], NodeAuthPassword)
-    pytype_mapping(_libcloud_compute_base["StorageVolume"], StorageVolume)
-    pytype_mapping(_libcloud_compute_base["VolumeSnapshot"], VolumeSnapshot)
-    pytype_mapping(_libcloud_compute_base["KeyPair"], KeyPair)
-    pytype_mapping(_libcloud_compute_deployment["SSHKeyDeployment"], SSHKeyDeployment)
-    pytype_mapping(_libcloud_compute_deployment["FileDeployment"], FileDeployment)
-    pytype_mapping(_libcloud_compute_deployment["ScriptDeployment"], ScriptDeployment)
-    pytype_mapping(_libcloud_compute_deployment["ScriptFileDeployment"], ScriptFileDeployment)
-    pytype_mapping(_libcloud_compute_deployment["MultiStepDeployment"], MultiStepDeployment)
+    _map_types(_libcloud_compute_base, (Node, NodeSize, NodeImage, NodeLocation, NodeAuthSSHKey, NodeAuthPassword, StorageVolume, VolumeSnapshot, KeyPair))
+    _map_types(_libcloud_compute_deployment, (SSHKeyDeployment, FileDeployment, ScriptDeployment, ScriptFileDeployment, MultiStepDeployment))
 end
 
 # types
 export ComputeProvider, NodeDriver, NodeSize, NodeImage, Node, NodeLocation, NodeAuthSSHKey, NodeAuthPassword, StorageVolume, VolumeSnapshot, KeyPair
+export NodeState, Architecture, StorageVolumeState, VolumeSnapshotState
 export SSHKeyDeployment, FileDeployment, ScriptDeployment, ScriptFileDeployment, MultiStepDeployment, stdout, stderr, exit_status, steps
 # Node management methods
 export list_nodes, list_sizes, list_locations, create_node, deploy_node, reboot_node, destroy_node, wait_until_running
+export features
 # Volume and snapshot management methods
 export list_volumes, list_volume_snapshots, create_volume, create_volume_snapshot, attach_volume, detach_volume, destroy_volume, destroy_volume_snapshot
 # Image management methods
@@ -393,7 +390,8 @@ export list_images, create_image, delete_image, get_image, copy_image
 export list_key_pairs, get_key_pair, create_key_pair, import_key_pair_from_string, import_key_pair_from_file, delete_key_pair
 
 export get_uuid
-export reboot, destroy
+# node methods
+export reboot, destroy, state
 export list_snapshots, attach, detach, snapshot, destroy
 export destroy
 

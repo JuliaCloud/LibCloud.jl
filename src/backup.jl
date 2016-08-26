@@ -115,9 +115,7 @@ function __init__()
     global const BackupTargetType = pywrap(_libcloud_backup_types[:BackupTargetType])
     global const BackupTargetJobStatusType = pywrap(_libcloud_backup_types[:BackupTargetJobStatusType])
 
-    pytype_mapping(_libcloud_backup_base["BackupTarget"], BackupTarget)
-    pytype_mapping(_libcloud_backup_base["BackupTargetJob"], BackupTargetJob)
-    pytype_mapping(_libcloud_backup_base["BackupTargetRecoveryPoint"], BackupTargetRecoveryPoint)
+    _map_types(_libcloud_backup_base, (BackupTarget, BackupTargetJob, BackupTargetRecoveryPoint))
 end
 
 # types

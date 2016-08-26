@@ -7,6 +7,13 @@ const _libcloud = PyCall.PyNULL()
 const _base_driver_fns = [:list_regions]
 global list_regions
 
+function _map_types(pymod, types)
+    for t in types
+        n = rsplit(string(t), '.', limit=2)[end]
+        pytype_mapping(pymod[n], t)
+    end
+end
+
 function __init__()
     copy!(_libcloud, pyimport_conda("libcloud", "apache-libcloud"))
 

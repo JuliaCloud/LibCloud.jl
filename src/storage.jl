@@ -92,8 +92,7 @@ function __init__()
 
     global const StorageProvider = pywrap(_libcloud_storage_types[:Provider])
 
-    pytype_mapping(_libcloud_storage_base["Container"], Container)
-    pytype_mapping(_libcloud_storage_base["Object"], Object)
+    _map_types(_libcloud_storage_base, (Container, Object))
 end
 
 # types

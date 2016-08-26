@@ -88,9 +88,7 @@ function __init__()
     global const Algorithm = pywrap(_libcloud_lb_base[:Algorithm])
     global const DefaultAlgorithm = Algorithm.ROUND_ROBIN
 
-    pytype_mapping(_libcloud_lb_base["Driver"], LBDriver)
-    pytype_mapping(_libcloud_lb_base["Member"], Member)
-    pytype_mapping(_libcloud_lb_base["LoadBalancer"], LoadBalancer)
+    _map_types(_libcloud_lb_base, (Member, LoadBalancer))
 end
 
 # types

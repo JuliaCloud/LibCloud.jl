@@ -129,10 +129,7 @@ function __init__()
     global const ContainerProvider = pywrap(_libcloud_container_types[:Provider])
     global const ContainerState = pywrap(_libcloud_container_types[:ContainerState])
 
-    pytype_mapping(_libcloud_container_base["ContainerImage"], ContainerImage)
-    pytype_mapping(_libcloud_container_base["ContainerCluster"], ContainerCluster)
-    pytype_mapping(_libcloud_container_base["ClusterLocation"], ClusterLocation)
-    pytype_mapping(_libcloud_container_base["Container"], Container)
+    _map_types(_libcloud_container_base, (ContainerImage, ContainerCluster, ClusterLocation, Container))
 end
 
 # types
