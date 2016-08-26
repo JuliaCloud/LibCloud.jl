@@ -5,6 +5,7 @@ include("module_common.jl")
 const _libcloud_compute_types = PyCall.PyNULL()
 const _libcloud_compute_providers = PyCall.PyNULL()
 const _libcloud_compute_base = PyCall.PyNULL()
+const _libcloud_compute_deployment = PyCall.PyNULL()
 
 immutable NodeDriver
     o::PyObject
@@ -183,6 +184,100 @@ convert(::Type{KeyPair}, o::PyObject) = KeyPair(o)
 show(io::IO, o::KeyPair) = print(io, o.o[:__str__]())
 @doc LazyHelp(_libcloud_compute_base, "KeyPair") KeyPair
 
+immutable SSHKeyDeployment
+    o::PyObject
+
+    key::String
+
+    function SSHKeyDeployment(o::PyObject)
+        new(o, o[:key])
+    end
+    function SSHKeyDeployment(key::String)
+        new(_libcloud_compute_deployment["SSHKeyDeployment"](key), key)
+    end
+end
+PyObject(o::SSHKeyDeployment) = o.o
+convert(::Type{SSHKeyDeployment}, o::PyObject) = SSHKeyDeployment(o)
+show(io::IO, o::SSHKeyDeployment) = print(io, o.o[:__str__]())
+@doc LazyHelp(_libcloud_compute_deployment, "SSHKeyDeployment") SSHKeyDeployment
+
+immutable FileDeployment
+    o::PyObject
+
+    source::String
+    target::String
+
+    function FileDeployment(o::PyObject)
+        new(o, o[:source], o[:target])
+    end
+    function FileDeployment(source::String, target::String)
+        new(_libcloud_compute_deployment["FileDeployment"](source, target), source, target)
+    end
+end
+PyObject(o::FileDeployment) = o.o
+convert(::Type{FileDeployment}, o::PyObject) = FileDeployment(o)
+show(io::IO, o::FileDeployment) = print(io, o.o[:__str__]())
+@doc LazyHelp(_libcloud_compute_deployment, "FileDeployment") FileDeployment
+
+immutable ScriptDeployment
+    o::PyObject
+
+    script::String
+    args::Vector{String}
+    name::String
+    delete::Bool
+
+    function ScriptDeployment(o::PyObject)
+        new(o, o[:script], o[:args], o[:name], o[:delete])
+    end
+    function ScriptDeployment(script::String, args...; kwargs...)
+        ScriptDeployment(_libcloud_compute_deployment["ScriptDeployment"](script, args..., kwargs...))
+    end
+end
+PyObject(o::ScriptDeployment) = o.o
+convert(::Type{ScriptDeployment}, o::PyObject) = ScriptDeployment(o)
+show(io::IO, o::ScriptDeployment) = print(io, o.o[:__str__]())
+@doc LazyHelp(_libcloud_compute_deployment, "ScriptDeployment") ScriptDeployment
+
+immutable ScriptFileDeployment
+    o::PyObject
+
+    script::String
+    args::Vector{String}
+    name::String
+    delete::Bool
+
+    function ScriptFileDeployment(o::PyObject)
+        new(o, o[:script], o[:args], o[:name], o[:delete])
+    end
+    function ScriptFileDeployment(script::String, args...; kwargs...)
+        ScriptDeployment(_libcloud_compute_deployment["ScriptFileDeployment"](script, args..., kwargs...))
+    end
+end
+PyObject(o::ScriptFileDeployment) = o.o
+convert(::Type{ScriptFileDeployment}, o::PyObject) = ScriptFileDeployment(o)
+show(io::IO, o::ScriptFileDeployment) = print(io, o.o[:__str__]())
+@doc LazyHelp(_libcloud_compute_deployment, "ScriptFileDeployment") ScriptFileDeployment
+
+immutable MultiStepDeployment
+    o::PyObject
+
+    function MultiStepDeployment(o::PyObject)
+        new(o)
+    end
+    function MultiStepDeployment(add::Vector=[])
+        if isempty(add)
+            MultiStepDeployment(_libcloud_compute_deployment["MultiStepDeployment"]())
+        else
+            MultiStepDeployment(_libcloud_compute_deployment["MultiStepDeployment"](add=add))
+        end
+    end
+end
+PyObject(o::MultiStepDeployment) = o.o
+convert(::Type{MultiStepDeployment}, o::PyObject) = MultiStepDeployment(o)
+show(io::IO, o::MultiStepDeployment) = print(io, o.o[:__str__]())
+@doc LazyHelp(_libcloud_compute_deployment, "MultiStepDeployment") MultiStepDeployment
+
 const _nodedriver_fns = [
     # Node management methods
     :list_nodes, :list_sizes, :list_locations, :create_node, :deploy_node, :reboot_node, :destroy_node, :wait_until_running,
@@ -198,6 +293,10 @@ const _uuid_fns = [ :get_uuid ]
 const _node_fns = [ :reboot, :destroy ]
 const _storage_volume_fns = [ :list_snapshots, :attach, :detach, :snapshot, :destroy ]
 const _volume_snapshot_fns = [ :destroy ]
+const _deployment_fns = [ :run ]
+const _multi_step_deployment_fns = [ :add ]
+const _script_deployment_accessor_fns = [ :stdout, :stdin, :exit_status ]
+const _multi_step_deployment_accessor_fns = [ :steps ]
 
 for f in _uuid_fns
     sf = string(f)
@@ -227,11 +326,37 @@ for f in _volume_snapshot_fns
     @eval @doc LazyHelp(_libcloud_compute_base, "VolumeSnapshot", $sf) $(f)(vol::VolumeSnapshot, args...; kwargs...) = vol.o[$(sf)](args..., kwargs...)
 end
 
+for f in _deployment_fns
+    sf = string(f)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "SSHKeyDeployment", $sf) $(f)(d::SSHKeyDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "FileDeployment", $sf) $(f)(d::FileDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "ScriptDeployment", $sf) $(f)(d::ScriptDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "ScriptDeployment", $sf) $(f)(d::ScriptFileDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "MultiStepDeployment", $sf) $(f)(d::MultiStepDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+end
+
+for f in _multi_step_deployment_fns
+    sf = string(f)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "MultiStepDeployment", $sf) $(f)(d::MultiStepDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+end
+
+for f in _script_deployment_accessor_fns
+    sf = string(f)
+    @eval $(f)(d::ScriptDeployment) = d.o[sf]
+    @eval $(f)(d::ScriptFileDeployment) = d.o[sf]
+end
+
+for f in _multi_step_deployment_accessor_fns
+    sf = string(f)
+    @eval $(f)(d::MultiStepDeployment) = d.o[sf]
+end
+
 # Initialize cloud dns
 function __init__()
     copy!(_libcloud_compute_types, pyimport("libcloud.compute.types"))
     copy!(_libcloud_compute_providers, pyimport("libcloud.compute.providers"))
     copy!(_libcloud_compute_base, pyimport("libcloud.compute.base"))
+    copy!(_libcloud_compute_deployment, pyimport("libcloud.compute.deployment"))
 
     global const ComputeProvider = pywrap(_libcloud_compute_types[:Provider])
     global const NodeState = pywrap(_libcloud_compute_types[:NodeState])
@@ -248,10 +373,16 @@ function __init__()
     pytype_mapping(_libcloud_compute_base["StorageVolume"], StorageVolume)
     pytype_mapping(_libcloud_compute_base["VolumeSnapshot"], VolumeSnapshot)
     pytype_mapping(_libcloud_compute_base["KeyPair"], KeyPair)
+    pytype_mapping(_libcloud_compute_deployment["SSHKeyDeployment"], SSHKeyDeployment)
+    pytype_mapping(_libcloud_compute_deployment["FileDeployment"], FileDeployment)
+    pytype_mapping(_libcloud_compute_deployment["ScriptDeployment"], ScriptDeployment)
+    pytype_mapping(_libcloud_compute_deployment["ScriptFileDeployment"], ScriptFileDeployment)
+    pytype_mapping(_libcloud_compute_deployment["MultiStepDeployment"], MultiStepDeployment)
 end
 
 # types
 export ComputeProvider, NodeDriver, NodeSize, NodeImage, Node, NodeLocation, NodeAuthSSHKey, NodeAuthPassword, StorageVolume, VolumeSnapshot, KeyPair
+export SSHKeyDeployment, FileDeployment, ScriptDeployment, ScriptFileDeployment, MultiStepDeployment, stdout, stderr, exit_status, steps
 # Node management methods
 export list_nodes, list_sizes, list_locations, create_node, deploy_node, reboot_node, destroy_node, wait_until_running
 # Volume and snapshot management methods
