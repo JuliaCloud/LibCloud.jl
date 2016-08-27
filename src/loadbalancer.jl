@@ -9,7 +9,7 @@ const _libcloud_lb_base = PyCall.PyNULL()
 immutable LBDriver
     o::PyObject
 
-    function LBDriver(provider::String, args...; kwargs...)
+    function LBDriver(provider::Compat.String, args...; kwargs...)
         cls = _libcloud_lb_providers[:get_driver](provider)
         LBDriver(cls(args...; kwargs...))
     end
@@ -20,10 +20,10 @@ show(io::IO, c::LBDriver) = print(io, c.o[:__str__]())
 immutable LoadBalancer
     o::PyObject
 
-    id::Nullable{String}
-    name::String
+    id::Nullable{Compat.String}
+    name::Compat.String
     state::Int
-    ip::String
+    ip::Compat.String
     port::Nullable{Int}
     driver::LBDriver
     extra::Dict
@@ -40,9 +40,9 @@ show(io::IO, o::LoadBalancer) = print(io, o.o[:__str__]())
 immutable Member
     o::PyObject
 
-    id::Nullable{String}
-    ip::Nullable{String}
-    port::Nullable{String}
+    id::Nullable{Compat.String}
+    ip::Nullable{Compat.String}
+    port::Nullable{Compat.String}
     balancer::Nullable{LoadBalancer}
     extra::Dict
 

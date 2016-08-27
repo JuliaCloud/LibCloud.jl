@@ -9,7 +9,7 @@ const _libcloud_container_base = PyCall.PyNULL()
 immutable ContainerDriver
     o::PyObject
 
-    function ContainerDriver(provider::String, args...; kwargs...)
+    function ContainerDriver(provider::Compat.String, args...; kwargs...)
         cls = _libcloud_container_providers[:get_driver](provider)
         ContainerDriver(cls(args...; kwargs...))
     end
@@ -20,10 +20,10 @@ show(io::IO, c::ContainerDriver) = print(io, c.o[:__str__]())
 immutable ContainerImage
     o::PyObject
 
-    id::Nullable{String}
-    name::String
-    path::String
-    version::String
+    id::Nullable{Compat.String}
+    name::Compat.String
+    path::Compat.String
+    version::Compat.String
     extra::Dict
     driver::ContainerDriver
 
@@ -39,8 +39,8 @@ show(io::IO, o::ContainerImage) = print(io, o.o[:__str__]())
 immutable ContainerCluster
     o::PyObject
 
-    id::Nullable{String}
-    name::String
+    id::Nullable{Compat.String}
+    name::Compat.String
     extra::Dict
     driver::ContainerDriver
 
@@ -56,9 +56,9 @@ show(io::IO, o::ContainerCluster) = print(io, o.o[:__str__]())
 immutable ClusterLocation
     o::PyObject
 
-    id::String
-    name::String
-    country::String
+    id::Compat.String
+    name::Compat.String
+    country::Compat.String
     driver::ContainerDriver
 
     function ClusterLocation(o::PyObject)
@@ -73,10 +73,10 @@ show(io::IO, o::ClusterLocation) = print(io, o.o[:__str__]())
 immutable Container
     o::PyObject
 
-    id::Nullable{String}
-    name::String
+    id::Nullable{Compat.String}
+    name::Compat.String
     image::ContainerImage
-    state::String
+    state::Compat.String
     ip_addresses::Array
     extra::Dict
     driver::ContainerDriver

@@ -9,7 +9,7 @@ const _libcloud_dns_base = PyCall.PyNULL()
 immutable DNSDriver
     o::PyObject
 
-    function DNSDriver(provider::String, args...; kwargs...)
+    function DNSDriver(provider::Compat.String, args...; kwargs...)
         cls = _libcloud_dns_providers[:get_driver](provider)
         DNSDriver(cls(args...; kwargs...))
     end
@@ -20,9 +20,9 @@ show(io::IO, c::DNSDriver) = print(io, c.o[:__str__]())
 immutable Zone
     o::PyObject
 
-    id::Nullable{String}
-    domain::String
-    typ::String
+    id::Nullable{Compat.String}
+    domain::Compat.String
+    typ::Compat.String
     ttl::Nullable{Int}
     driver::DNSDriver
     extra::Dict
@@ -39,10 +39,10 @@ show(io::IO, o::Zone) = print(io, o.o[:__str__]())
 immutable Record
     o::PyObject
 
-    id::Nullable{String}
-    name::String
-    typ::String
-    data::String
+    id::Nullable{Compat.String}
+    name::Compat.String
+    typ::Compat.String
+    data::Compat.String
     zone::Zone
     driver::DNSDriver
     ttl::Int

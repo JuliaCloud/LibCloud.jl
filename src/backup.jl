@@ -9,7 +9,7 @@ const _libcloud_backup_base = PyCall.PyNULL()
 immutable BackupDriver
     o::PyObject
 
-    function BackupDriver(provider::String, args...; kwargs...)
+    function BackupDriver(provider::Compat.String, args...; kwargs...)
         cls = _libcloud_backup_providers[:get_driver](provider)
         BackupDriver(cls(args...; kwargs...))
     end
@@ -20,10 +20,10 @@ show(io::IO, c::BackupDriver) = print(io, c.o[:__str__]())
 immutable BackupTarget
     o::PyObject
 
-    id::Nullable{String}
-    name::String
-    address::String
-    typ::String
+    id::Nullable{Compat.String}
+    name::Compat.String
+    address::Compat.String
+    typ::Compat.String
     extra::Dict
     driver::BackupDriver
 
@@ -39,8 +39,8 @@ show(io::IO, o::BackupTarget) = print(io, o.o[:__str__]())
 immutable BackupTargetJob
     o::PyObject
 
-    id::Nullable{String}
-    status::String
+    id::Nullable{Compat.String}
+    status::Compat.String
     progress::Int
     target::BackupTarget
     extra::Dict
@@ -58,7 +58,7 @@ show(io::IO, o::BackupTargetJob) = print(io, o.o[:__str__]())
 immutable BackupTargetRecoveryPoint
     o::PyObject
 
-    id::Nullable{String}
+    id::Nullable{Compat.String}
     date::DateTime
     target::BackupTarget
     extra::Dict

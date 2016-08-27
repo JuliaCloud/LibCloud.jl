@@ -9,6 +9,9 @@ julia:
   - nightly
 notifications:
   email: false
+before_install:
+  - pip install --user backports.ssl_match_hostname
+  - pip install --user apache-libcloud
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - julia -e 'Pkg.clone(pwd()); Pkg.build("LibCloud"); Pkg.test("LibCloud"; coverage=true)'
