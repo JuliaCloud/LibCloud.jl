@@ -8,7 +8,7 @@
 
 **LibCloud** is a Julia interface for Apache LibCloud.
 
-[**Apache Libcloud**](https://libcloud.readthedocs.io/en/latest/index.html) is a Python library which hides differences between different cloud provider APIs and allows you to manage different cloud resources through a unified and easy to use API.
+[**Apache Libcloud**](http://libcloud.apache.org/) is a Python library which hides differences between different cloud provider APIs and allows you to manage different cloud resources through a unified and easy to use API.
 
 ## Installation
 The `apache-libcloud` python library is needed for LibCloud to work.
