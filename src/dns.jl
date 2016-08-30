@@ -42,10 +42,10 @@ immutable Record
     id::Nullable{Compat.String}
     name::Compat.String
     typ::Compat.String
-    data::Compat.String
+    data::Any
     zone::Zone
     driver::DNSDriver
-    ttl::Int
+    ttl::Nullable{Int}
     extra::Dict
 
     function Record(o::PyObject)

@@ -38,7 +38,7 @@ immutable Object
 
     name::Compat.String
     size::Int
-    hash::Compat.String
+    hash::Nullable{Compat.String}
     container::Container
     extra::Dict
     meta_data::Dict
