@@ -38,14 +38,16 @@ immutable Object
 
     name::Compat.String
     size::Int
-    hash::Compat.String
+    hash::Nullable{Compat.String}
     container::Container
     extra::Dict
     meta_data::Dict
     driver::StorageDriver
 
     function Object(o::PyObject)
-        new(o, o[:name], o[:size], o[:hash], Container(o[:container]), o[:extra], o[:meta_data] , StorageDriver(o[:driver]))
+        sz = o[:size]
+        szint = isa(sz, Integer) ? Int(sz) : parse(Int, sz)
+        new(o, o[:name], szint, o[:hash], Container(o[:container]), o[:extra], o[:meta_data] , StorageDriver(o[:driver]))
     end
 end
 PyObject(o::Object) = o.o

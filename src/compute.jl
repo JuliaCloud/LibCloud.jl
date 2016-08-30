@@ -64,16 +64,16 @@ immutable Node
     name::Compat.String
     public_ips::Vector
     private_ips::Vector
-    size::Nullable{NodeSize}
-    image::Nullable{NodeImage}
+    size::Nullable{Any}    # can be NodeSize, String, Nothing
+    image::Nullable{Any}   # can be NodeImage, String, Nothing
     created_at::Nullable{DateTime}
     extra::Dict
     driver::NodeDriver
 
     function Node(o::PyObject)
         created_at = (o[:created_at] == nothing) ? Nullable{DateTime}() : Nullable(DateTime(o[:created_at]))
-        size = (o[:size] == nothing) ? Nullable{NodeSize}() : Nullable(NodeSize(o[:size]))
-        image = (o[:image] == nothing) ? Nullable{NodeImage}() : Nullable(NodeImage(o[:image]))
+        size = (o[:size] == nothing) ? Nullable{Any}() : Nullable{Any}(o[:size])
+        image = (o[:image] == nothing) ? Nullable{Any}() : Nullable{Any}(o[:image])
         new(o, o[:id], o[:name], o[:public_ips], o[:private_ips], size, image, created_at, o[:extra], NodeDriver(o[:driver]))
     end
 end
