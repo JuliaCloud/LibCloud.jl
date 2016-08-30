@@ -82,4 +82,40 @@ function dummy()
     @test k.o[:pubkey] == "my pub key"
 end
 
+function gce(service_account_id, key, project)
+    driver = NodeDriver(ComputeProvider.GCE, service_account_id, key, project=project)
+
+    driver_features = features(driver)
+    @test "create_node" in keys(driver_features)
+    @test isempty(driver_features["create_node"])
+
+    println("Listing nodes...")
+    nodes = list_nodes(driver)
+    @test !isempty(nodes)
+    for n in nodes
+        @test isa(n, Node)
+    end
+
+    println("Listing sizes...")
+    sizes = list_sizes(driver)
+    @test !isempty(sizes)
+    for s in sizes
+        @test isa(s, NodeSize)
+    end     
+
+    println("Listing images...")
+    images = list_images(driver)
+    @test !isempty(images)
+    for i in images
+        @test isa(i, NodeImage)
+    end
+
+    println("Listing locations...")
+    locs = list_locations(driver)
+    @test !isempty(locs)
+    for l in locs
+        @test isa(l, NodeLocation)
+    end
+end
+
 end # module TestCompute
