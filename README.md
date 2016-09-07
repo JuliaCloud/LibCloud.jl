@@ -47,9 +47,9 @@ With each sub-module:
 - call `features(driver)` to examine the feaures the driver provides
 - execute appropriate actions by calling corresponding methods on the driver
 
-The verion of the underlying library is available as `LibCloud.version`.
+The version of the underlying library is available as `LibCloud.version`.
 
-## API documentation
+## API Documentation
 Refer to [LibCloud API Documentation](https://libcloud.readthedocs.io/en/latest/index.html).
 
 Look at examples in the `LibCloud/test` subfolder for some common use cases.
