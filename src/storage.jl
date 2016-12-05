@@ -73,17 +73,17 @@ const _object_fns = [
 
 for f in union(Set(_storagedriver_fns), Set(_base_driver_fns))
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_storage_base, "StorageDriver", $sf) $(f)(storage::StorageDriver, args...; kwargs...) = storage.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_storage_base, "StorageDriver", $sf) $(f)(storage::StorageDriver, args...; kwargs...) = storage.o[$(sf)](args...; kwargs...)
 end
 
 for f in _container_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_storage_base, "Container", $sf) $(f)(cont::Container, args...; kwargs...) = cont.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_storage_base, "Container", $sf) $(f)(cont::Container, args...; kwargs...) = cont.o[$(sf)](args...; kwargs...)
 end
 
 for f in _object_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_storage_base, "Object", $sf) $(f)(obj::Object, args...; kwargs...) = obj.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_storage_base, "Object", $sf) $(f)(obj::Object, args...; kwargs...) = obj.o[$(sf)](args...; kwargs...)
 end
 
 # Initialize cloud storage
