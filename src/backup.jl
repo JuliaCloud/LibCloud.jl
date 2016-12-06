@@ -87,22 +87,22 @@ const _backup_target_recovery_point_fns = [ :recover, :recover_to ]
 
 for f in union(Set(_backupdriver_fns), Set(_base_driver_fns))
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_backup_base, "BackupDriver", $sf) $(f)(b::BackupDriver, args...; kwargs...) = b.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_backup_base, "BackupDriver", $sf) $(f)(b::BackupDriver, args...; kwargs...) = b.o[$(sf)](args...; kwargs...)
 end
 
 for f in _backup_target_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_backup_base, "BackupTarget", $sf) $(f)(b::BackupTarget, args...; kwargs...) = b.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_backup_base, "BackupTarget", $sf) $(f)(b::BackupTarget, args...; kwargs...) = b.o[$(sf)](args...; kwargs...)
 end
 
 for f in _backup_target_job_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_backup_base, "BackupTargetJob", $sf) $(f)(b::BackupTargetJob, args...; kwargs...) = b.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_backup_base, "BackupTargetJob", $sf) $(f)(b::BackupTargetJob, args...; kwargs...) = b.o[$(sf)](args...; kwargs...)
 end
 
 for f in _backup_target_recovery_point_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_backup_base, "BackupTargetRecoveryPoint", $sf) $(f)(b::BackupTargetRecoveryPoint, args...; kwargs...) = b.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_backup_base, "BackupTargetRecoveryPoint", $sf) $(f)(b::BackupTargetRecoveryPoint, args...; kwargs...) = b.o[$(sf)](args...; kwargs...)
 end
 
 # Initialize cloud backup

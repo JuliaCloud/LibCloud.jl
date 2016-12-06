@@ -237,7 +237,7 @@ immutable ScriptDeployment
         new(o, o[:script], o[:args], o[:name], o[:delete])
     end
     function ScriptDeployment(script::Compat.String, args...; kwargs...)
-        ScriptDeployment(_libcloud_compute_deployment["ScriptDeployment"](script, args..., kwargs...))
+        ScriptDeployment(_libcloud_compute_deployment["ScriptDeployment"](script, args...; kwargs...))
     end
 end
 PyObject(o::ScriptDeployment) = o.o
@@ -257,7 +257,7 @@ immutable ScriptFileDeployment
         new(o, o[:script], o[:args], o[:name], o[:delete])
     end
     function ScriptFileDeployment(script::Compat.String, args...; kwargs...)
-        ScriptDeployment(_libcloud_compute_deployment["ScriptFileDeployment"](script, args..., kwargs...))
+        ScriptDeployment(_libcloud_compute_deployment["ScriptFileDeployment"](script, args...; kwargs...))
     end
 end
 PyObject(o::ScriptFileDeployment) = o.o
@@ -306,44 +306,44 @@ const _multi_step_deployment_accessor_fns = [ :steps ]
 
 for f in _uuid_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_compute_base, "UuidMixin", $sf) $(f)(n::Node, args...; kwargs...) = n.o[$(sf)](args..., kwargs...)
-    @eval @doc LazyHelp(_libcloud_compute_base, "UuidMixin", $sf) $(f)(n::NodeSize, args...; kwargs...) = n.o[$(sf)](args..., kwargs...)
-    @eval @doc LazyHelp(_libcloud_compute_base, "UuidMixin", $sf) $(f)(n::NodeImage, args...; kwargs...) = n.o[$(sf)](args..., kwargs...)
-    @eval @doc LazyHelp(_libcloud_compute_base, "UuidMixin", $sf) $(f)(n::StorageVolume, args...; kwargs...) = n.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_base, "UuidMixin", $sf) $(f)(n::Node, args...; kwargs...) = n.o[$(sf)](args...; kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_base, "UuidMixin", $sf) $(f)(n::NodeSize, args...; kwargs...) = n.o[$(sf)](args...; kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_base, "UuidMixin", $sf) $(f)(n::NodeImage, args...; kwargs...) = n.o[$(sf)](args...; kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_base, "UuidMixin", $sf) $(f)(n::StorageVolume, args...; kwargs...) = n.o[$(sf)](args...; kwargs...)
 end
 
 for f in union(Set(_nodedriver_fns), Set(_base_driver_fns))
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_compute_base, "NodeDriver", $sf) $(f)(driver::NodeDriver, args...; kwargs...) = driver.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_base, "NodeDriver", $sf) $(f)(driver::NodeDriver, args...; kwargs...) = driver.o[$(sf)](args...; kwargs...)
 end
 
 for f in _node_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_compute_base, "Node", $sf) $(f)(node::Node, args...; kwargs...) = node.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_base, "Node", $sf) $(f)(node::Node, args...; kwargs...) = node.o[$(sf)](args...; kwargs...)
 end
 
 for f in _storage_volume_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_compute_base, "StorageVolume", $sf) $(f)(vol::StorageVolume, args...; kwargs...) = vol.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_base, "StorageVolume", $sf) $(f)(vol::StorageVolume, args...; kwargs...) = vol.o[$(sf)](args...; kwargs...)
 end
 
 for f in _volume_snapshot_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_compute_base, "VolumeSnapshot", $sf) $(f)(vol::VolumeSnapshot, args...; kwargs...) = vol.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_base, "VolumeSnapshot", $sf) $(f)(vol::VolumeSnapshot, args...; kwargs...) = vol.o[$(sf)](args...; kwargs...)
 end
 
 for f in _deployment_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_compute_deployment, "SSHKeyDeployment", $sf) $(f)(d::SSHKeyDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
-    @eval @doc LazyHelp(_libcloud_compute_deployment, "FileDeployment", $sf) $(f)(d::FileDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
-    @eval @doc LazyHelp(_libcloud_compute_deployment, "ScriptDeployment", $sf) $(f)(d::ScriptDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
-    @eval @doc LazyHelp(_libcloud_compute_deployment, "ScriptDeployment", $sf) $(f)(d::ScriptFileDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
-    @eval @doc LazyHelp(_libcloud_compute_deployment, "MultiStepDeployment", $sf) $(f)(d::MultiStepDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "SSHKeyDeployment", $sf) $(f)(d::SSHKeyDeployment, args...; kwargs...) = d.o[$(sf)](args...; kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "FileDeployment", $sf) $(f)(d::FileDeployment, args...; kwargs...) = d.o[$(sf)](args...; kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "ScriptDeployment", $sf) $(f)(d::ScriptDeployment, args...; kwargs...) = d.o[$(sf)](args...; kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "ScriptDeployment", $sf) $(f)(d::ScriptFileDeployment, args...; kwargs...) = d.o[$(sf)](args...; kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "MultiStepDeployment", $sf) $(f)(d::MultiStepDeployment, args...; kwargs...) = d.o[$(sf)](args...; kwargs...)
 end
 
 for f in _multi_step_deployment_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_compute_deployment, "MultiStepDeployment", $sf) $(f)(d::MultiStepDeployment, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_compute_deployment, "MultiStepDeployment", $sf) $(f)(d::MultiStepDeployment, args...; kwargs...) = d.o[$(sf)](args...; kwargs...)
 end
 
 for f in _script_deployment_accessor_fns

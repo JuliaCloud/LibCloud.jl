@@ -68,12 +68,12 @@ const _lb_fns = [
 
 for f in union(Set(_lbdriver_fns), Set(_base_driver_fns))
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_lb_base, "Driver", $sf) $(f)(lb::LBDriver, args...; kwargs...) = lb.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_lb_base, "Driver", $sf) $(f)(lb::LBDriver, args...; kwargs...) = lb.o[$(sf)](args...; kwargs...)
 end
 
 for f in _lb_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_lb_base, "LoadBalancer", $sf) $(f)(lb::LoadBalancer, args...; kwargs...) = lb.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_lb_base, "LoadBalancer", $sf) $(f)(lb::LoadBalancer, args...; kwargs...) = lb.o[$(sf)](args...; kwargs...)
 end
 
 # Initialize load balancer
