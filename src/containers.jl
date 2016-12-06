@@ -102,22 +102,22 @@ const _container_fns = [ :start, :stop, :restart, :destroy ]
 
 for f in union(Set(_containerdriver_fns), Set(_base_driver_fns))
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_container_base, "ContainerDriver", $sf) $(f)(d::ContainerDriver, args...; kwargs...) = d.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_container_base, "ContainerDriver", $sf) $(f)(d::ContainerDriver, args...; kwargs...) = d.o[$(sf)](args...; kwargs...)
 end
 
 for f in _container_cluster_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_container_base, "ContainerCluster", $sf) $(f)(c::ContainerCluster, args...; kwargs...) = c.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_container_base, "ContainerCluster", $sf) $(f)(c::ContainerCluster, args...; kwargs...) = c.o[$(sf)](args...; kwargs...)
 end
 
 for f in _container_image_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_container_base, "ContainerImage", $sf) $(f)(c::ContainerImage, args...; kwargs...) = c.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_container_base, "ContainerImage", $sf) $(f)(c::ContainerImage, args...; kwargs...) = c.o[$(sf)](args...; kwargs...)
 end
 
 for f in _container_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_container_base, "Container", $sf) $(f)(c::Container, args...; kwargs...) = c.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_container_base, "Container", $sf) $(f)(c::Container, args...; kwargs...) = c.o[$(sf)](args...; kwargs...)
 end
 
 # Initialize container service

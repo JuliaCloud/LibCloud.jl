@@ -73,17 +73,17 @@ const _record_fns = [
 
 for f in union(Set(_dnsdriver_fns), Set(_base_driver_fns))
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_dns_base, "DNSDriver", $sf) $(f)(dns::DNSDriver, args...; kwargs...) = dns.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_dns_base, "DNSDriver", $sf) $(f)(dns::DNSDriver, args...; kwargs...) = dns.o[$(sf)](args...; kwargs...)
 end
 
 for f in _zone_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_dns_base, "Zone", $sf) $(f)(zone::Zone, args...; kwargs...) = zone.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_dns_base, "Zone", $sf) $(f)(zone::Zone, args...; kwargs...) = zone.o[$(sf)](args...; kwargs...)
 end
 
 for f in _record_fns
     sf = string(f)
-    @eval @doc LazyHelp(_libcloud_dns_base, "Record", $sf) $(f)(rec::Record, args...; kwargs...) = rec.o[$(sf)](args..., kwargs...)
+    @eval @doc LazyHelp(_libcloud_dns_base, "Record", $sf) $(f)(rec::Record, args...; kwargs...) = rec.o[$(sf)](args...; kwargs...)
 end
 
 # Initialize cloud dns
